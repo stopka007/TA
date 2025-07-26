@@ -5,12 +5,13 @@ interface TableRowProps {
   item: HierarchyItem;
   level: number;
   onToggle: (itemId: string) => void;
-  onRemove: (itemId: string, parentKey?: string, itemIndex?: number) => void;
+  onRemove: (itemId: string, parentKey?: string, itemIndex?: number, parentId?: string) => void;
   expandedItems: Set<string>;
   columnHeaders: string[];
   isChild?: boolean;
   parentKey?: string;
   itemIndex?: number;
+  parentId?: string;
 }
 
 const TableRow: React.FC<TableRowProps> = ({
@@ -22,7 +23,8 @@ const TableRow: React.FC<TableRowProps> = ({
   columnHeaders,
   isChild = false,
   parentKey,
-  itemIndex
+  itemIndex,
+  parentId
 }) => {
   const itemId = item.data.ID;
   const isExpanded = expandedItems.has(itemId);
@@ -36,7 +38,7 @@ const TableRow: React.FC<TableRowProps> = ({
   };
 
   const handleRemove = () => {
-    onRemove(itemId, parentKey, itemIndex);
+    onRemove(itemId, parentKey, itemIndex, parentId);
   };
 
   const getCellValue = (header: string): string => {
@@ -134,6 +136,7 @@ const TableRow: React.FC<TableRowProps> = ({
                   isChild={true}
                   parentKey={childKey}
                   itemIndex={childIndex}
+                  parentId={item.data.ID}
                 />
               ))}
             </>

@@ -19,8 +19,8 @@ const HierarchyTable: React.FC<HierarchyTableProps> = ({ data }) => {
     });
   }, []);
 
-  const handleRemove = useCallback((itemId: string, parentKey?: string, itemIndex?: number) => {
-    dataService.removeItem(itemId, parentKey, itemIndex);
+  const handleRemove = useCallback((itemId: string, parentKey?: string, itemIndex?: number, parentId?: string) => {
+    dataService.removeItem(itemId, parentKey, itemIndex, parentId);
     setTableData(() => [...dataService.getData()]);
   }, []);
 
