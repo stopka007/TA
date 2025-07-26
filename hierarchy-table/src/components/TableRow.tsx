@@ -45,23 +45,28 @@ const TableRow: React.FC<TableRowProps> = ({
 
   const getIndentationStyle = () => {
     if (level === 0) return {};
-    return { paddingLeft: `${Math.min(level * 20, 80)}px` };
+    return { paddingLeft: `${Math.min(level * 40, 200)}px` };
   };
 
   return (
     <>
       <tr className={`
         transition-colors duration-200 animate-fade-in
-        ${isChild || level > 0 ? 'bg-dark-surface-2' : (level % 2 === 0 ? 'bg-dark-surface-3' : 'bg-dark-surface-2')}
+        ${level === 0 ? 'bg-dark-surface-3' : 
+          level === 1 ? 'bg-dark-surface-2' : 
+          level === 2 ? 'bg-gray-800' : 
+          'bg-gray-900'}
         hover:bg-dark-hover
+        
       `}>
-        <td className="w-10 min-w-10 p-3 border-none align-middle text-center" style={getIndentationStyle()}>
+        <td className="w-10 min-w-10 p-3 border-none align-middle text-center " style={getIndentationStyle()}>
           {hasChildren && (
             <button
               className={`
-                bg-transparent border-none text-white cursor-pointer p-1 rounded transition-colors duration-200
-                hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-teal-primary focus:ring-offset-2
+                border-none text-white cursor-pointer p-1 rounded transition-colors duration-200
+                hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-teal-primary focus:ring-offset-2
                 flex items-center justify-center w-6 h-6 bg-blue-500
+               
               `}
               onClick={handleToggle}
               aria-label={isExpanded ? 'Collapse' : 'Expand'}
@@ -74,7 +79,13 @@ const TableRow: React.FC<TableRowProps> = ({
         </td>
         {columnHeaders.map(header => (
           <td key={header} className="p-3 border-none align-middle max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
-            {getCellValue(header)}
+            <span className={`
+              ${level === 0 ? 'font-semibold' : 
+                level === 1 ? 'font-medium' : 
+                'font-normal'}
+            `}>
+              {getCellValue(header)}
+            </span>
           </td>
         ))}
         <td className="w-16 min-w-16 p-3 border-none align-middle text-center">
@@ -94,22 +105,40 @@ const TableRow: React.FC<TableRowProps> = ({
       </tr>
       
       {isExpanded && hasChildren && (
-        Object.entries(item.children).map(([childKey, childGroup]) => (
-          childGroup.records.map((childRecord, childIndex) => (
-            <TableRow
-              key={`${childRecord.data.ID}-${childIndex}`}
-              item={childRecord}
-              level={level + 1}
-              onToggle={onToggle}
-              onRemove={onRemove}
-              expandedItems={expandedItems}
-              columnHeaders={columnHeaders}
-              isChild={true}
-              parentKey={childKey}
-              itemIndex={childIndex}
-            />
-          ))
-        ))
+        <>
+          {Object.entries(item.children).map(([childKey, childGroup]) => (
+            <>
+              {/* Nested header for this child group */}
+              <tr className="bg-teal-primary text-white">
+                <th className="w-10 min-w-10 p-2 text-left font-semibold border-none" style={{ paddingLeft: `${Math.min((level + 1) * 40, 200)}px` }}></th>
+                {Object.keys(childGroup.records[0]?.data || {}).map(header => (
+                  <th key={header} className="p-2 text-left font-semibold border-none text-sm">
+                    {header}
+                  </th>
+                ))}
+                <th className="w-16 min-w-16 p-2 text-left font-semibold border-none text-sm">delete</th>
+              </tr>
+              {/* Spacer row for visual separation */}
+              <tr className="h-1 bg-transparent">
+                <td colSpan={Object.keys(childGroup.records[0]?.data || {}).length + 2} className="p-0"></td>
+              </tr>
+              {childGroup.records.map((childRecord, childIndex) => (
+                <TableRow
+                  key={`${childRecord.data.ID}-${childIndex}`}
+                  item={childRecord}
+                  level={level + 1}
+                  onToggle={onToggle}
+                  onRemove={onRemove}
+                  expandedItems={expandedItems}
+                  columnHeaders={Object.keys(childRecord.data)}
+                  isChild={true}
+                  parentKey={childKey}
+                  itemIndex={childIndex}
+                />
+              ))}
+            </>
+          ))}
+        </>
       )}
     </>
   );

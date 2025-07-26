@@ -83,19 +83,11 @@ class DataService {
   getColumnHeaders(): string[] {
     const headers = new Set<string>();
     
-    const extractHeaders = (items: HierarchyItem[]) => {
-      items.forEach(item => {
-        Object.keys(item.data).forEach(key => headers.add(key));
-        Object.values(item.children).forEach(childGroup => {
-          childGroup.records.forEach(record => {
-            Object.keys(record.data).forEach(key => headers.add(key));
-            extractHeaders([record]);
-          });
-        });
-      });
-    };
+    // Only get headers from root level data
+    this.data.forEach(item => {
+      Object.keys(item.data).forEach(key => headers.add(key));
+    });
     
-    extractHeaders(this.data);
     return Array.from(headers);
   }
 }
