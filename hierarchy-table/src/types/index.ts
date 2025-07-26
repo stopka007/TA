@@ -18,16 +18,6 @@ export interface HierarchyItem {
   children: ChildrenData;
 }
 
-export interface TableRowProps {
-  item: HierarchyItem;
-  level: number;
-  onToggle: (itemId: string) => void;
-  onRemove: (itemId: string) => void;
-  expandedItems: Set<string>;
-  isChild?: boolean;
-  parentKey?: string;
-}
-
 export interface HierarchyTableProps {
   data: HierarchyItem[];
 } 

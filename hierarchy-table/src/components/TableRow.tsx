@@ -43,7 +43,6 @@ const TableRow: React.FC<TableRowProps> = ({
     return item.data[header] || '';
   };
 
-  // Calculate indentation based on level
   const getIndentationStyle = () => {
     if (level === 0) return {};
     return { paddingLeft: `${Math.min(level * 20, 80)}px` };
@@ -62,7 +61,7 @@ const TableRow: React.FC<TableRowProps> = ({
               className={`
                 bg-transparent border-none text-white cursor-pointer p-1 rounded transition-colors duration-200
                 hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-teal-primary focus:ring-offset-2
-                flex items-center justify-center w-6 h-6
+                flex items-center justify-center w-6 h-6 bg-blue-500
               `}
               onClick={handleToggle}
               aria-label={isExpanded ? 'Collapse' : 'Expand'}
@@ -94,7 +93,6 @@ const TableRow: React.FC<TableRowProps> = ({
         </td>
       </tr>
       
-      {/* Render child tables when expanded */}
       {isExpanded && hasChildren && (
         Object.entries(item.children).map(([childKey, childGroup]) => (
           childGroup.records.map((childRecord, childIndex) => (

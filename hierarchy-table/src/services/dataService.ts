@@ -20,14 +20,11 @@ class DataService {
 
   removeItem(itemId: string, parentKey?: string, itemIndex?: number): void {
     if (parentKey) {
-      // Remove from children
       this.removeFromChildren(this.data, itemId, parentKey, itemIndex);
     } else {
-      // Remove from root level - if we have an index, remove the specific item
       if (itemIndex !== undefined) {
         this.data.splice(itemIndex, 1);
       } else {
-        // Fallback to removing by ID
         const index = this.data.findIndex(item => item.data.ID === itemId);
         if (index !== -1) {
           this.data.splice(index, 1);
@@ -40,43 +37,33 @@ class DataService {
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       
-      // Check if this item has the parent key in its children
       if (item.children[parentKey]) {
         const records = item.children[parentKey].records;
         const initialLength = records.length;
         
-        // Remove the target item and all its children recursively
         if (itemIndex !== undefined) {
-          // Remove the specific item at the given index
           if (itemIndex >= 0 && itemIndex < records.length) {
             const record = records[itemIndex];
-            // Remove all children of this record first
             this.removeAllChildren(record);
-            // Remove the record itself
             records.splice(itemIndex, 1);
             return true;
           }
         } else {
-          // Fallback to removing by ID
           for (let j = records.length - 1; j >= 0; j--) {
             const record = records[j];
             if (record.data.ID === itemId) {
-              // Remove all children of this record first
               this.removeAllChildren(record);
-              // Remove the record itself
               records.splice(j, 1);
               return true;
             }
           }
         }
         
-        // If we found and removed the item, return true
         if (records.length < initialLength) {
           return true;
         }
       }
       
-      // Recursively search in all children
       for (const childKey in item.children) {
         if (this.removeFromChildren(item.children[childKey].records, itemId, parentKey, itemIndex)) {
           return true;
@@ -93,7 +80,6 @@ class DataService {
     }
   }
 
-  // Helper method to get all column headers from the data
   getColumnHeaders(): string[] {
     const headers = new Set<string>();
     

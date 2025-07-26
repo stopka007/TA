@@ -2,12 +2,12 @@
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
-  "css.customData": [".vscode/css_custom_data.json"],
   "tailwindCSS.includeLanguages": {
-    "css": "css"
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
   },
   "tailwindCSS.experimental.classRegex": [
-    ["@apply\\s+([^;}]+)", "([^;}]+)"],
-    ["@layer\\s+([^;}]+)", "([^;}]+)"]
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ]
 } 

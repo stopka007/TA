@@ -20,47 +20,11 @@ const HierarchyTable: React.FC<HierarchyTableProps> = ({ data }) => {
   }, []);
 
   const handleRemove = useCallback((itemId: string, parentKey?: string, itemIndex?: number) => {
-    // Use the DataService to remove the item
     dataService.removeItem(itemId, parentKey, itemIndex);
-    
-    // Update local state to reflect the change
-    setTableData(prevData => {
-      // Get the updated data from the service
-      return [...dataService.getData()];
-    });
+    setTableData(() => [...dataService.getData()]);
   }, []);
 
-  // Get all unique column headers
-  const getColumnHeaders = (): string[] => {
-    const headers = new Set<string>();
-    
-    const extractHeaders = (items: HierarchyItem[]) => {
-      if (!items || items.length === 0) return;
-      
-      items.forEach(item => {
-        if (item.data) {
-          Object.keys(item.data).forEach(key => headers.add(key));
-        }
-        if (item.children) {
-          Object.values(item.children).forEach(childGroup => {
-            if (childGroup && childGroup.records) {
-              childGroup.records.forEach(record => {
-                if (record.data) {
-                  Object.keys(record.data).forEach(key => headers.add(key));
-                }
-                extractHeaders([record]);
-              });
-            }
-          });
-        }
-      });
-    };
-    
-    extractHeaders(tableData);
-    return Array.from(headers);
-  };
-
-  const columnHeaders = getColumnHeaders();
+  const columnHeaders = dataService.getColumnHeaders();
 
   if (!tableData || tableData.length === 0) {
     return (
@@ -77,13 +41,13 @@ const HierarchyTable: React.FC<HierarchyTableProps> = ({ data }) => {
       <table className="w-full border-collapse bg-dark-surface text-white text-sm min-w-[1200px]">
         <thead>
           <tr className="bg-teal-primary text-white">
-            <th className="w-10 min-w-10 p-3 text-left font-semibold border-none sticky top-0 z-10 text-center"></th>
+            <th className="w-10 min-w-10 p-3 text-left font-semibold border-none sticky top-0 z-10"></th>
             {columnHeaders.map(header => (
               <th key={header} className="p-3 text-left font-semibold border-none sticky top-0 z-10">
                 {header}
               </th>
             ))}
-            <th className="w-16 min-w-16 p-3 text-left font-semibold border-none sticky top-0 z-10 text-center">delete</th>
+            <th className="w-16 min-w-16 p-3 text-left font-semibold border-none sticky top-0 z-10">delete</th>
           </tr>
         </thead>
         <tbody>
