@@ -37,13 +37,13 @@ const HierarchyTable: React.FC<HierarchyTableProps> = ({ data }) => {
   }
 
   return (
-    <div className="bg-dark-surface text-white font-sans p-5 rounded-lg overflow-x-auto scrollbar-thin">
-      <table className="mx-auto border-collapse bg-dark-surface text-white text-sm min-w-[1200px] max-w-[1400px]">
+    <div className="bg-dark-surface text-white font-sans p-5 rounded-lg overflow-x-auto scrollbar-thin w-full">
+      <table className="border-collapse bg-dark-surface text-white text-sm min-w-[1600px] w-full">
         <thead>
           <tr className="bg-teal-primary text-white">
             <th className="w-10 min-w-10 p-3 text-left font-semibold border-none sticky top-0 z-10"></th>
             {columnHeaders.map(header => (
-              <th key={header} className="p-3 text-left font-semibold border-none sticky top-0 z-10">
+              <th key={header} className="p-3 text-left font-semibold border-none sticky top-0 z-10 min-w-[150px]">
                 {header}
               </th>
             ))}

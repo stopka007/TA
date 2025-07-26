@@ -80,7 +80,7 @@ const TableRow: React.FC<TableRowProps> = ({
           )}
         </td>
         {columnHeaders.map(header => (
-          <td key={header} className="p-3 border-none align-middle max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+          <td key={header} className="p-3 border-none align-middle min-w-[150px] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
             <span className={`
               ${level === 0 ? 'font-semibold' : 
                 level === 1 ? 'font-medium' : 
@@ -114,7 +114,7 @@ const TableRow: React.FC<TableRowProps> = ({
               <tr className="bg-teal-primary text-white">
                 <th className="w-10 min-w-10 p-2 text-left font-semibold border-none" style={{ paddingLeft: `${Math.min((level + 1) * 40, 200)}px` }}></th>
                 {Object.keys(childGroup.records[0]?.data || {}).map(header => (
-                  <th key={header} className="p-2 text-left font-semibold border-none text-sm">
+                  <th key={header} className="p-2 text-left font-semibold border-none text-sm min-w-[150px]">
                     {header}
                   </th>
                 ))}
